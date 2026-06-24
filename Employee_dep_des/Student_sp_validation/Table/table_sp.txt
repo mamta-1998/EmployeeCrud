@@ -1,0 +1,245 @@
+----------------students table ------------------
+CREATE TABLE Students
+(
+    StudentId INT IDENTITY(1,1) PRIMARY KEY, 
+    StudentName VARCHAR(100) NOT NULL, 
+    FatherName VARCHAR(100) NOT NULL, 
+    Gender VARCHAR(10), 
+    DOB DATE, 
+    Mobile VARCHAR(15), 
+    Email VARCHAR(100), 
+    PhysicsMarks INT, 
+    ChemistryMarks INT, 
+    MathMarks INT, 
+    TotalMarks INT, 
+    Percentage DECIMAL(18,2), 
+    AdmissionStatus VARCHAR(50), 
+    CreatedDate DATETIME DEFAULT GETDATE()
+)
+GO
+
+
+
+
+
+
+
+
+--------------------Stored Procedures---------------
+
+CREATE PROCEDURE SP_InsertStudent
+(
+    @StudentName VARCHAR(100),
+    @FatherName VARCHAR(100),
+    @Gender VARCHAR(10),
+    @DOB DATE,
+    @Mobile VARCHAR(15),
+    @Email VARCHAR(100),
+    @PhysicsMarks INT,
+    @ChemistryMarks INT,
+    @MathMarks INT,
+    @TotalMarks INT,
+    @Percentage DECIMAL(18,2),
+    @AdmissionStatus VARCHAR(50)
+)
+AS
+BEGIN
+
+    INSERT INTO Students
+    (
+        StudentName,
+        FatherName,
+        Gender,
+        DOB,
+        Mobile,
+        Email,
+        PhysicsMarks,
+        ChemistryMarks,
+        MathMarks,
+        TotalMarks,
+        Percentage,
+        AdmissionStatus
+    )
+    VALUES
+    (
+        @StudentName,
+        @FatherName,
+        @Gender,
+        @DOB,
+        @Mobile,
+        @Email,
+        @PhysicsMarks,
+        @ChemistryMarks,
+        @MathMarks,
+        @TotalMarks,
+        @Percentage,
+        @AdmissionStatus
+    )
+
+END
+GO
+
+
+
+
+
+
+
+
+
+
+-----------------------Get All Students-------------
+CREATE PROCEDURE SP_GetStudents
+AS
+BEGIN
+
+    SELECT *
+    FROM Students
+    ORDER BY StudentId DESC
+
+END
+GO
+
+
+
+
+
+
+
+----------------------Get Student By Id------------------
+CREATE PROCEDURE SP_GetStudentById
+(
+    @StudentId INT
+)
+AS
+BEGIN
+
+    SELECT *
+    FROM Students
+    WHERE StudentId=@StudentId
+
+END
+GO
+
+
+
+------------------Insert Student -------------------
+
+ALTER PROCEDURE [dbo].[SP_InsertStudent]
+(
+    @StudentName VARCHAR(100),
+    @FatherName VARCHAR(100),
+    @Gender VARCHAR(10),
+    @DOB DATE,
+    @Mobile VARCHAR(15),
+    @Email VARCHAR(100),
+    @PhysicsMarks INT,
+    @ChemistryMarks INT,
+    @MathMarks INT,
+    @TotalMarks INT,
+    @Percentage DECIMAL(18,2),
+    @AdmissionStatus VARCHAR(50)
+)
+AS
+BEGIN
+
+    INSERT INTO Students
+    (
+        StudentName,
+        FatherName,
+        Gender,
+        DOB,
+        Mobile,
+        Email,
+        PhysicsMarks,
+        ChemistryMarks,
+        MathMarks,
+        TotalMarks,
+        Percentage,
+        AdmissionStatus
+    )
+    VALUES
+    (
+        @StudentName,
+        @FatherName,
+        @Gender,
+        @DOB,
+        @Mobile,
+        @Email,
+        @PhysicsMarks,
+        @ChemistryMarks,
+        @MathMarks,
+        @TotalMarks,
+        @Percentage,
+        @AdmissionStatus
+    )
+
+END
+
+
+
+
+
+
+
+-------------------Update Student-----------
+
+CREATE PROCEDURE SP_UpdateStudent
+(
+    @StudentId INT,
+    @StudentName VARCHAR(100),
+    @FatherName VARCHAR(100),
+    @Gender VARCHAR(10),
+    @DOB DATE,
+    @Mobile VARCHAR(15),
+    @Email VARCHAR(100),
+    @PhysicsMarks INT,
+    @ChemistryMarks INT,
+    @MathMarks INT,
+    @TotalMarks INT,
+    @Percentage DECIMAL(18,2),
+    @AdmissionStatus VARCHAR(50)
+)
+AS
+BEGIN
+
+    UPDATE Students
+    SET
+        StudentName=@StudentName,
+        FatherName=@FatherName,
+        Gender=@Gender,
+        DOB=@DOB,
+        Mobile=@Mobile,
+        Email=@Email,
+        PhysicsMarks=@PhysicsMarks,
+        ChemistryMarks=@ChemistryMarks,
+        MathMarks=@MathMarks,
+        TotalMarks=@TotalMarks,
+        Percentage=@Percentage,
+        AdmissionStatus=@AdmissionStatus
+    WHERE StudentId=@StudentId
+
+END
+GO
+
+
+
+
+
+
+
+
+
+-----------------Delete Student------------------
+CREATE PROCEDURE SP_DeleteStudent
+(
+    @StudentId INT
+)
+AS
+BEGIN
+
+    DELETE FROM Students
+    WHERE StudentId=@StudentId
+
+END
+GO

@@ -1,0 +1,116 @@
+﻿@* @model List<Student> *@
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div class="container mt-4">
+
+    <div class="d-flex justify-content-between mb-3">
+
+        <h3>Student Admission List</h3>
+
+        <a asp-action="Create"
+           class="btn btn-success">
+            Add Student
+        </a>
+
+    </div>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success">
+            @TempData["Success"]
+        </div>
+    }
+
+    <div class="card shadow">
+
+        <div class="card-body">
+
+            <table class="table table-bordered table-hover">
+
+                <thead class="table-dark">
+
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Father</th>
+                        <th>Mobile</th>
+                        <th>Total</th>
+                        <th>%</th>
+                        <th>Status</th>
+                        <th width="180">Action</th>
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+
+                            <td>@item.StudentId</td>
+
+                            <td>@item.StudentName</td>
+
+                            <td>@item.FatherName</td>
+
+                            <td>@item.Mobile</td>
+
+                            <td>@item.TotalMarks</td>
+
+                            <td>@item.Percentage</td>
+
+                            <td>
+
+                                @if (item.AdmissionStatus == "Eligible")
+                                {
+                                    <span class="badge bg-success">
+                                        Eligible
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-danger">
+                                        Not Eligible
+                                    </span>
+                                }
+
+                            </td>
+
+                            <td>
+
+                                <a asp-action="Edit"
+                                   asp-route-id="@item.StudentId"
+                                   class="btn btn-warning btn-sm">
+                                    Edit
+                                </a>
+
+                                <a asp-action="Details"
+                                   asp-route-id="@item.StudentId"
+                                   class="btn btn-info btn-sm">
+                                    View
+                                </a>
+
+                                <a asp-action="Delete"
+                                   asp-route-id="@item.StudentId"
+                                   class="btn btn-danger btn-sm">
+                                    Delete
+                                </a>
+
+                            </td>
+
+                        </tr>
+                    }
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+

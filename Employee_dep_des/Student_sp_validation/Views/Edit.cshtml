@@ -1,0 +1,102 @@
+﻿@model FinalMVC.Models.Student
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<div class="container mt-4">
+
+    <div class="card shadow">
+
+        <div class="card-header bg-warning">
+            <h4>Edit Student</h4>
+        </div>
+
+        <div class="card-body">
+
+            <form asp-action="Edit" method="post">
+
+                <input asp-for="StudentId" type="hidden" />
+
+                <div asp-validation-summary="All"
+                     class="text-danger">
+                </div>
+
+                <div class="row">
+
+                    <div class="col-md-6 mb-3">
+                        <label>Student Name</label>
+                        <input asp-for="StudentName"
+                               class="form-control" />
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label>Father Name</label>
+                        <input asp-for="FatherName"
+                               class="form-control" />
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+                        <label>Gender</label>
+                        <select asp-for="Gender"
+                                class="form-control">
+                            <option>Male</option>
+                            <option>Female</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+                        <label>DOB</label>
+                        <input asp-for="DOB"
+                               type="date"
+                               class="form-control" />
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+                        <label>Mobile</label>
+                        <input asp-for="Mobile"
+                               class="form-control" />
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label>Email</label>
+                        <input asp-for="Email"
+                               class="form-control" />
+                    </div>
+
+                    <div class="col-md-2 mb-3">
+                        <label>Physics</label>
+                        <input asp-for="PhysicsMarks"
+                               class="form-control" />
+                    </div>
+
+                    <div class="col-md-2 mb-3">
+                        <label>Chemistry</label>
+                        <input asp-for="ChemistryMarks"
+                               class="form-control" />
+                    </div>
+
+                    <div class="col-md-2 mb-3">
+                        <label>Math</label>
+                        <input asp-for="MathMarks"
+                               class="form-control" />
+                    </div>
+
+                </div>
+
+                <button type="submit"
+                        class="btn btn-primary">
+                    Update
+                </button>
+
+                <a asp-action="Index"
+                   class="btn btn-secondary">
+                    Back
+                </a>
+
+            </form>
+
+        </div>
+    </div>
+
+</div>
+
