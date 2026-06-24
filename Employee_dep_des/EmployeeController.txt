@@ -1,0 +1,134 @@
+using FinalMVC.Models;
+using FinalMVC.Repository;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using NuGet.Protocol.Core.Types;
+
+namespace FinalMVC.Controllers
+{
+    public class EmployeeController : Controller
+    {
+        private readonly IEmployeeRepository _repository;
+        public EmployeeController(IEmployeeRepository Repository)
+        {
+            _repository = Repository;
+        }
+        public IActionResult Index()
+        {
+            return View(_repository.GetAll());
+        }
+        public IActionResult Login()
+        {
+            return View();
+        }
+        [HttpPost]
+        public IActionResult Login(string username, string password)
+        {
+            bool isvalid = _repository.IsValidUser(username, password);
+            if (isvalid)
+            {
+                TempData["Success"] = "login successful";
+                return RedirectToAction("Index", "Employee");
+            }
+            else
+            {
+                ViewBag.ErrorMessage = "Invalid username or password.";
+                return View();
+            }
+        }
+        public IActionResult Create()
+        {
+            LoadDepartments();
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult Create(EmployeeModel employee)
+        {
+            ModelState.Remove("DepartmentName");
+            ModelState.Remove("DesignationName");
+
+            if (ModelState.IsValid)
+            {
+                _repository.Add(employee); 
+                TempData["Success"] = "Employee Added Successfully"; 
+                return RedirectToAction("Index");
+            }
+            LoadDepartments(); 
+            if (employee.DepartmentId > 0)
+            {
+                LoadDesignations(employee.DepartmentId);
+            } 
+            return View(employee);
+        }
+        public IActionResult Details(int id)
+        {
+            EmployeeModel employee = _repository.GetById(id);
+            return View(employee);
+        }
+        public IActionResult Edit(int id)
+        {
+            EmployeeModel employee = _repository.GetById(id);
+            LoadDepartments();
+            LoadDesignations(employee.DepartmentId);
+            return View(employee);
+        }
+
+        [HttpPost]
+        public IActionResult Edit(EmployeeModel employee)
+        {
+            ModelState.Remove("DepartmentName");
+            ModelState.Remove("DesignationName");
+            if (ModelState.IsValid)
+            {
+                _repository.Update(employee);
+                TempData["Success"] = "Employee Updated Successfully";
+                return RedirectToAction("Index");
+            }
+
+            LoadDepartments();
+            LoadDesignations(employee.DepartmentId);
+            return View(employee);
+        }
+
+        public IActionResult Delete(int id)
+        {
+            _repository.Delete(id); 
+            TempData["Success"] = "Employee Deleted Successfully"; 
+            return RedirectToAction("Index");
+        }
+        
+        [HttpGet]
+        public JsonResult GetDesignations(int departmentId)
+        {
+            return Json(_repository.GetDesignationsByDepartment(departmentId));
+        }
+        private void LoadDepartments()
+        {
+            List<SelectListItem> departmentList = new List<SelectListItem>(); 
+            foreach (var item in _repository.GetDepartments())
+            {
+                departmentList.Add(new SelectListItem
+                {
+                    Value = item.DepartmentId.ToString(),
+                    Text = item.DepartmentName
+                });
+            } 
+            ViewBag.DepartmentList = departmentList;
+        }
+
+        private void LoadDesignations(int departmentId)
+        {
+            List<SelectListItem> designationList = new List<SelectListItem>(); 
+            foreach (var item in _repository.GetDesignationsByDepartment(departmentId))
+            {
+                designationList.Add(new SelectListItem
+                {
+                    Value = item.DesignationId.ToString(),
+                    Text = item.DesignationName
+                });
+            } 
+            ViewBag.DesignationList = designationList;
+        }
+    }
+}

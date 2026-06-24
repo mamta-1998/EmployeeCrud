@@ -1,0 +1,199 @@
+using System.Data;
+using FinalMVC.Data;
+using FinalMVC.Models;
+using Microsoft.Data.SqlClient;
+
+namespace FinalMVC.Repository
+{
+    public class EmployeeRepository : IEmployeeRepository
+    {
+        private readonly DBHelper _dbHelper;
+        public EmployeeRepository(DBHelper dbHelper)
+        {
+            _dbHelper = dbHelper;
+        }
+        public bool IsValidUser(string username, string password)
+        {
+            string query = @"SELECT 1 
+                     FROM Login  
+                     WHERE UserName = @UserName 
+                     AND Password = @Password";
+
+            SqlParameter[] parameters =
+            {
+                new SqlParameter("@UserName", username),
+                new SqlParameter("@Password", password)
+            };
+
+            object result = _dbHelper.ExecuteScalar(query, parameters);
+
+            return result != null;
+        }
+        public void Add(EmployeeModel employee)
+        {
+            string query = @" INSERT INTO Employees 
+            ( Name,Address,Mobile,Age, Gender,DOB,DepartmentId,DesignationId ) VALUES
+            (@Name,@Address,@Mobile,@Age, @Gender,@DOB,@DepartmentId,@DesignationId )";
+
+            SqlParameter[] parameters =
+            {
+                new("@Name",employee.Name),
+                new("@Address",employee.Address),
+                new("@Mobile",employee.Mobile),
+                new("@Age",employee.Age),
+                new("@Gender",employee.Gender),
+                new("@DOB",employee.DOB),
+                new("@DepartmentId",employee.DepartmentId),
+                new("@DesignationId",employee.DesignationId)
+            };
+
+            _dbHelper.ExecuteNonQuery(query, parameters);
+        }
+
+        public void Delete(int id)
+        {
+            string query ="DELETE FROM Employees WHERE Id=@Id";
+            SqlParameter[] parameters =
+            {
+                new("@Id",id)
+            };
+            _dbHelper.ExecuteNonQuery(query, parameters);
+        }
+
+        public List<EmployeeModel> GetAll()
+        {
+            string query = @" SELECT E.*, D.DepartmentName, DG.DesignationName FROM Employees E LEFT JOIN Departments D ON E.DepartmentId = D.DepartmentId LEFT JOIN Designations DG ON E.DesignationId = DG.DesignationId";
+
+            DataTable dt = _dbHelper.ExecuteQuery(query);
+            List<EmployeeModel> list = new();
+            foreach (DataRow row in dt.Rows)
+            {
+                list.Add(new EmployeeModel
+                {
+                    Id = Convert.ToInt32(row["Id"]),
+                    Name = row["Name"].ToString(),
+                    Address = row["Address"].ToString(),
+                    Mobile = row["Mobile"].ToString(),
+                    Age = Convert.ToInt32(row["Age"]),
+                    Gender = row["Gender"].ToString(),
+                    DOB = Convert.ToDateTime(row["DOB"]),
+                    DepartmentName = row["DepartmentName"].ToString(),
+                    DesignationName = row["DesignationName"].ToString()
+                });
+            }
+
+            return list;
+        }
+
+        public EmployeeModel GetById(int id)
+        {
+            string query = @" SELECT
+        E.*,
+        D.DepartmentName,
+        DG.DesignationName
+    FROM Employees E
+    LEFT JOIN Departments D
+        ON E.DepartmentId = D.DepartmentId
+    LEFT JOIN Designations DG
+        ON E.DesignationId = DG.DesignationId
+    WHERE E.Id = @Id";
+
+            SqlParameter[] parameters =
+            {
+        new SqlParameter("@Id", id)
+    };
+
+            DataTable dt = _dbHelper.ExecuteQuery(query, parameters);
+
+            if (dt.Rows.Count == 0)
+                return null;
+
+            DataRow row = dt.Rows[0];
+
+            return new EmployeeModel
+            {
+                Id = Convert.ToInt32(row["Id"]),
+                Name = row["Name"].ToString(),
+                Address = row["Address"].ToString(),
+                Mobile = row["Mobile"].ToString(),
+                Age = Convert.ToInt32(row["Age"]),
+                Gender = row["Gender"].ToString(),
+                DOB = Convert.ToDateTime(row["DOB"]),
+
+                DepartmentId = Convert.ToInt32(row["DepartmentId"]),
+                DesignationId = Convert.ToInt32(row["DesignationId"]),
+
+                DepartmentName = row["DepartmentName"].ToString(),
+                DesignationName = row["DesignationName"].ToString()
+            };
+        }
+
+        public List<EmployeeModel> GetDepartments()
+        {
+            string query = "SELECT * FROM Departments";
+
+            DataTable dt = _dbHelper.ExecuteQuery(query);
+
+            List<EmployeeModel> departments = new List<EmployeeModel>();
+
+            foreach (DataRow row in dt.Rows)
+            {
+                EmployeeModel department = new EmployeeModel();
+
+                department.DepartmentId = Convert.ToInt32(row["DepartmentId"]);
+                department.DepartmentName = row["DepartmentName"].ToString();
+
+                departments.Add(department);
+            }
+
+            return departments;
+        }
+
+        public List<EmployeeModel> GetDesignationsByDepartment(int departmentId)
+        {
+            string query = @"SELECT DesignationId, DesignationName
+                     FROM Designations WHERE DepartmentId = @DepartmentId";
+
+            SqlParameter[] parameters =
+            {
+        new SqlParameter("@DepartmentId", departmentId)
+    };
+
+            DataTable dt = _dbHelper.ExecuteQuery(query, parameters);
+
+            List<EmployeeModel> designations = new List<EmployeeModel>();
+
+            foreach (DataRow row in dt.Rows)
+            {
+                EmployeeModel designation = new EmployeeModel();
+
+                designation.DesignationId = Convert.ToInt32(row["DesignationId"]);
+                designation.DesignationName = row["DesignationName"].ToString();
+
+                designations.Add(designation);
+            }
+
+            return designations;
+        }
+        public void Update(EmployeeModel employee)
+        {
+            string query = @" UPDATE Employees SET Name=@Name, Address=@Address, Mobile=@Mobile, Age=@Age, Gender=@Gender, DOB=@DOB, DepartmentId=@DepartmentId,DesignationId=@DesignationId WHERE Id=@Id";
+
+            SqlParameter[] parameters =
+            {
+                new("@Id",employee.Id),
+                new("@Name",employee.Name),
+                new("@Address",employee.Address),
+                new("@Mobile",employee.Mobile),
+                new("@Age",employee.Age),
+                new("@Gender",employee.Gender),
+                new("@DOB",employee.DOB),
+                new("@DepartmentId",employee.DepartmentId),
+                new("@DesignationId",employee.DesignationId)
+            };
+
+            _dbHelper.ExecuteNonQuery(query, parameters);
+        }
+       
+    }
+}

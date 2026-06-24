@@ -1,0 +1,25 @@
+using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Mvc.Rendering;
+
+namespace FinalMVC.Models
+{
+    public class EmployeeModel
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string Address { get; set; }
+        public string Mobile { get; set; }
+        public int Age { get; set; }
+
+        [Required(ErrorMessage = "Please select gender")]
+        public string Gender { get; set; }
+        public DateTime DOB { get; set; }
+        public int DepartmentId { get; set; }
+        public int DesignationId { get; set; }
+        public string DepartmentName { get; set; }
+        public string DesignationName { get; set; }
+        public List<SelectListItem>? DepartmentList { get; set; }
+        public List<SelectListItem>? DesignationList { get; set; }
+
+    }
+}

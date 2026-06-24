@@ -1,0 +1,9 @@
+var builder = WebApplication.CreateBuilder(args);
+
+// Add services to the container.
+builder.Services.AddControllersWithViews();
+builder.Services.AddScoped<DBHelper>();
+builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+builder.Services.AddScoped<IStudentRepository, StudentRepository>();
+
+var app = builder.Build();

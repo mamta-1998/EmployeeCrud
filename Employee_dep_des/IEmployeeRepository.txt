@@ -1,0 +1,16 @@
+using FinalMVC.Models;
+
+namespace FinalMVC.Repository
+{
+    public interface IEmployeeRepository
+    {
+        List<EmployeeModel> GetAll();
+        EmployeeModel GetById(int id);
+        bool IsValidUser(string username, string password);
+        void Add(EmployeeModel employee);
+        void Update(EmployeeModel employee);
+        void Delete(int id);
+        List<EmployeeModel>GetDepartments();
+        List<EmployeeModel> GetDesignationsByDepartment(int DepartmentId);
+    }
+}

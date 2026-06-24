@@ -1,0 +1,12 @@
+{
+    "Logging": {
+        "LogLevel": {
+            "Default": "Information",
+            "Microsoft.AspNetCore": "Warning"
+        }
+    },
+    "ConnectionStrings": {
+        "DefaultConnection": "Server=DESKTOP-B6AHOV9;Database=Final;Trusted_Connection=True;MultipleActiveResultSets=true; TrustServerCertificate=True"
+    },
+    "AllowedHosts": "*"
+}

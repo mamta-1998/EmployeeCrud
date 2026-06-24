@@ -1,0 +1,47 @@
+@model LoginModel
+@{
+    ViewData["Title"] = "Login";
+}
+
+<h1>Login</h1>
+
+<div class="login-container">
+
+    <div class="login-title">
+        <h1>Welcome Back</h1>
+        <p>Please login to continue</p>
+    </div>
+
+    <form asp-action="Login" method="post">
+
+        <div class="form-group">
+            <label asp-for="UserName"></label>
+            <input asp-for="UserName" class="form-control" placeholder="Enter Username" />
+            <span asp-validation-for="UserName" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Password"></label>
+            <input asp-for="Password" type="password" class="form-control" placeholder="Enter Password" />
+            <span asp-validation-for="Password" class="text-danger"></span>
+        </div>
+
+        @if (ViewBag.Message != null)
+        {
+            <div class="error-message">
+                @ViewBag.Message
+            </div>
+        }
+
+        <button type="submit" class="login-btn">
+            Login
+        </button>
+
+        <div class="bottom-text">
+            Don't have an account?
+            <a href="#">Register</a>
+        </div>
+
+    </form>
+
+</div>

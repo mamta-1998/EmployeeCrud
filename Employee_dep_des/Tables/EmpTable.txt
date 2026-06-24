@@ -1,0 +1,191 @@
+
+------------Departments --------------------
+
+CREATE TABLE Departments
+(
+    DepartmentId INT IDENTITY(1,1) PRIMARY KEY,
+    DepartmentName VARCHAR(100) NOT NULL
+);
+------------------Insert Departments---------------
+INSERT INTO Departments (DepartmentName)
+VALUES
+('HR'),
+('IT'),
+('Finance'),
+('Sales'),
+('Admin');
+
+
+
+
+----------------------Designations------------------
+CREATE TABLE Designations
+(
+    DesignationId INT IDENTITY(1,1) PRIMARY KEY,
+    DesignationName VARCHAR(100) NOT NULL,
+    DepartmentId INT NOT NULL,
+
+    FOREIGN KEY (DepartmentId)
+    REFERENCES Departments(DepartmentId)
+);
+
+------------------Insert designations ------------------------
+INSERT INTO Designations
+(DesignationName, DepartmentId)
+VALUES
+
+('HR Manager',1),
+('HR Executive',1),
+
+('Software Developer',2),
+('Senior Developer',2),
+('Team Lead',2),
+
+('Accountant',3),
+('Finance Manager',3),
+
+('Sales Executive',4),
+('Sales Manager',4),
+
+('Admin Officer',5),
+('Office Assistant',5);
+
+
+-------------------------Employees -------------------------
+CREATE TABLE Employees
+(
+    Id INT IDENTITY(1,1) PRIMARY KEY,
+    Name VARCHAR(100),
+    Address VARCHAR(200),
+    Mobile VARCHAR(15),
+    Age INT,
+    Gender VARCHAR(10),
+    DOB DATE,
+    DepartmentId INT,
+    DesignationId INT,
+
+    FOREIGN KEY (DepartmentId)
+    REFERENCES Departments(DepartmentId),
+
+    FOREIGN KEY (DesignationId)
+    REFERENCES Designations(DesignationId)
+);
+
+
+------------------------Insert Employees -----------------------
+INSERT INTO Employees
+(
+    Name,
+    Address,
+    Mobile,
+    Age,
+    Gender,
+    DOB,
+    DepartmentId,
+    DesignationId
+)
+VALUES
+
+(
+    'Rahul Sharma',
+    'Raipur',
+    '9876543210',
+    28,
+    'Male',
+    '1997-02-15',
+    2,
+    3
+),
+
+(
+    'Priya Verma',
+    'Bilaspur',
+    '9876543211',
+    30,
+    'Female',
+    '1995-08-20',
+    1,
+    1
+),
+
+(
+    'Amit Kumar',
+    'Durg',
+    '9876543212',
+    35,
+    'Male',
+    '1990-01-10',
+    3,
+    6
+),
+
+(
+    'Neha Gupta',
+    'Raigarh',
+    '9876543213',
+    27,
+    'Female',
+    '1998-05-25',
+    4,
+    8
+),
+
+(
+    'Suresh Patel',
+    'Korba',
+    '9876543214',
+    32,
+    'Male',
+    '1993-03-18',
+    5,
+    10
+);
+
+
+
+-------------------------Verify Data-----------------------
+
+SELECT
+    E.Id,
+    E.Name,
+    E.Address,
+    E.Mobile,
+    E.Age,
+    E.Gender,
+    E.DOB,
+    D.DepartmentName,
+    DG.DesignationName
+FROM Employees E
+INNER JOIN Departments D
+    ON E.DepartmentId = D.DepartmentId
+INNER JOIN Designations DG
+    ON E.DesignationId = DG.DesignationId;
+
+
+
+
+
+-----------------------Login-----------------------
+
+CREATE TABLE [dbo].[Login](
+	[LoginId] [int] IDENTITY(1,1) NOT NULL,
+	[UserName] [varchar](50) NULL,
+	[Password] [varchar](15) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[LoginId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+
+
+---------------------Foreign Key References Add------------------
+
+ALTER TABLE Student
+ADD DepartmentId INT;
+
+ALTER TABLE Student
+ADD CONSTRAINT FK_Student_Departments
+FOREIGN KEY (DepartmentId)
+REFERENCES Departments(DepartmentId);

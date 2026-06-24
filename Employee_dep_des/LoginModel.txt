@@ -1,0 +1,19 @@
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+
+namespace FinalMVC.Models
+{
+    public class LoginModel
+    {
+        public int LoginId { get; set; }
+
+
+        [DisplayName("login id")]
+        [Required(ErrorMessage = "username manadatory")]
+        public string UserName { get; set; }
+
+
+        [Required]
+        public string Password { get; set; }
+    }
+}
